@@ -1,0 +1,29 @@
+---
+- name: Initial setup
+  hosts: webservers
+  gather_facts: no
+  remote_user: root
+
+  tasks:
+    - name: Recreate swap with 2 Gb
+      shell: |
+        swapoff /swapfile
+        rm /swapfile
+
+        fallocate -l 2g /swapfile
+        chmod 600 /swapfile
+        mkswap /swapfile
+        swapon /swapfile
+
+    - name: Install necessary packages
+      apt: 
+        name: "{{ item }}"
+        state: latest
+        update_cache: yes
+      with_items: 
+        - ['curl', 'git-core', 'postgresql', 'postgresql-contrib', 'libpq-dev',
+            'nodejs']
+    
+    - name: Create user
+      user:
+        name: "{{ user }}"
