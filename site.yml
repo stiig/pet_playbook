@@ -24,6 +24,32 @@
         - ['curl', 'git-core', 'postgresql', 'postgresql-contrib', 'libpq-dev',
             'nodejs']
     
-    - name: Create user
+    - name: Create user and set group sudo
       user:
         name: "{{ user }}"
+        append: yes
+        groups: sudo
+        shell: /bin/bash
+
+    - name: Add key for user
+      authorized_key:
+        user: "{{ user }}"
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Install rvm
+  hosts: webservers
+  gather_facts: no
+  remote_user: "{{ user }}"
+
+  tasks:
+    - name: Import GPG keys
+      command: gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+
+    - name: Install rvm installer
+      get_url:
+        url: https://get.rvm.io
+        dest: /tmp/rvm-installer.sh
+        mode: 0755
+      
+    - name: Install rvm
+      command: /tmp/rvm-installer.sh stable
