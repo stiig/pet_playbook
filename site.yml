@@ -53,3 +53,8 @@
       
     - name: Install rvm
       command: /tmp/rvm-installer.sh stable
+
+    - name: Create DB user
+      postgresql_user:
+        name: {{ user }}
+        role_attr_flags: CREATEDB,NOSUPERUSER
