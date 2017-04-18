@@ -4,6 +4,12 @@
   gather_facts: no
   remote_user: root
 
+  roles:
+    - swap
+    - packages
+    - user
+    - add_key_to_user
+
   tasks:
     - name: Recreate swap with 2 Gb
       shell: |
@@ -40,6 +46,11 @@
   hosts: webservers
   gather_facts: no
   remote_user: "{{ user }}"
+
+  roles:
+    - rvm
+    - db_user
+    - nginx_config
 
   tasks:
     - name: Import GPG keys
