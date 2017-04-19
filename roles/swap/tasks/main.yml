@@ -1,0 +1,10 @@
+---
+- name: Recreate swap with 2 Gb
+  shell: |
+    swapoff /swapfile
+    rm /swapfile
+
+    fallocate -l 2g /swapfile
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
