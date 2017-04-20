@@ -1,0 +1,12 @@
+---
+- name: Create user and set group sudo
+  user:
+    name: "{{ user }}"
+    append: yes
+    groups: sudo
+    shell: /bin/bash
+
+- name: Add key for user
+  authorized_key:
+    user: "{{ user }}"
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
