@@ -1,0 +1,5 @@
+---
+- name: Create DB user
+  postgresql_user:
+    name: {{ user }}
+    role_attr_flags: CREATEDB,NOSUPERUSER
